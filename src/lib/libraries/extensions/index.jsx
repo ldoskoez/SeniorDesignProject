@@ -1,6 +1,9 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import nitroIconURL from './NitroBlock/westfall.png';
+import nitroInsetIconURL from './NitroBlock/pen-small.svg';
+
 import musicIconURL from './music/music.png';
 import musicInsetIconURL from './music/music-small.svg';
 
@@ -47,6 +50,26 @@ import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="NitroBlock"
+                description="Name for the 'NitroTest' extension"
+                id="gui.extension.NitroBlock.name"
+            />
+        ),
+        extensionId: 'NitroBlock',
+        iconURL: nitroIconURL,
+        insetIconURL: nitroInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="testing with nitro blocks"
+                description="Description for the 'test nitro' extension"
+                id="gui.extension.NitroBlock.description"
+            />
+        ),
+        featured: true
+    },
     {
         name: (
             <FormattedMessage

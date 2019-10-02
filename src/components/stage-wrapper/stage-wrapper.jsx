@@ -8,6 +8,8 @@ import StageHeader from '../../containers/stage-header.jsx';
 import Stage from '../../containers/stage.jsx';
 import Loader from '../loader/loader.jsx';
 
+import Pdollarbox from '../../containers/pdollar-box.jsx';
+
 import styles from './stage-wrapper.css';
 
 const StageWrapperComponent = function (props) {
@@ -37,10 +39,19 @@ const StageWrapperComponent = function (props) {
                         <Stage
                             stageSize={stageSize}
                             vm={vm}
-                        /> :
+                        /> 
+
+                        :
                         null
+
                 }
+               
             </Box>
+
+            
+            
+
+
             {loading ? (
                 <Loader isFullScreen={isFullScreen} />
             ) : null}
