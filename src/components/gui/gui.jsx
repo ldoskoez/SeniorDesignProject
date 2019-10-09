@@ -340,12 +340,11 @@ const GUIComponent = props => {
                                 vm={vm}
                             />
 
-                            <StageWrapper
-                                isRendererSupported={isRendererSupported}
-                                isRtl={isRtl}
-                                stageSize={stageSize}
-                                vm={vm}
-                            />
+
+
+
+
+
 
                             <Box className={styles.targetWrapper}>
                                 <TargetPane

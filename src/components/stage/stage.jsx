@@ -14,6 +14,9 @@ import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
 import {getStageDimensions} from '../../lib/screen-utils.js';
 import styles from './stage.css';
 
+import {Pdollarbox} from '../pdollarbox/pdollarbox.jsx';
+
+
 const StageComponent = props => {
     const {
         canvas,
@@ -58,6 +61,12 @@ const StageComponent = props => {
                         width: stageDimensions.width
                     }}
                 >
+
+
+
+                    <Pdollarbox /> 
+
+
                     <DOMElementRenderer
                         domElement={canvas}
                         style={{
@@ -66,13 +75,29 @@ const StageComponent = props => {
                         }}
                         {...boxProps}
                     />
+
+
+                    
+
+
                 </Box>
+
+
+
+                
+
+
+
                 <Box className={styles.monitorWrapper}>
                     <MonitorList
                         draggable={useEditorDragStyle}
                         stageSize={stageDimensions}
                     />
                 </Box>
+
+               
+
+
                 <Box className={styles.frameWrapper}>
                     <TargetHighlight
                         className={styles.frame}
@@ -91,6 +116,8 @@ const StageComponent = props => {
                         <Loupe colorInfo={colorInfo} />
                     </Box>
                 ) : null}
+
+
                 <div
                     className={styles.stageBottomWrapper}
                     style={{
@@ -118,6 +145,11 @@ const StageComponent = props => {
                         </div>
                     )}
                 </div>
+
+
+               
+
+
                 <canvas
                     className={styles.draggingSprite}
                     height={0}
