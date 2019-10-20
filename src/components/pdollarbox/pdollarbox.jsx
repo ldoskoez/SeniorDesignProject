@@ -13,7 +13,8 @@ import MicIndicator from '../mic-indicator/mic-indicator.jsx';
 import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
 import {getStageDimensions} from '../../lib/screen-utils.js';
 import styles from './pdollarbox.css';
-import * as pdollar from './pdollar.js'; 
+import {PDollarRecognizer} from './pdollar.js';
+import {PointCloud} from './pdollar.js'; 
 
 export class Pdollarbox extends React.Component {
   
@@ -48,7 +49,7 @@ export class Pdollarbox extends React.Component {
         {
             this._points = new Array(); // point array for current stroke
             this._strokeID = 0;
-            this._r = new pdollar.PDollarRecognizer();
+            this._r = new PDollarRecognizer();
 
             var canvas = document.getElementById('myCanvas');
             _g = canvas.getContext('2d');

@@ -61,26 +61,26 @@
 //
 // Point class
 //
-function Point(x, y, id) // constructor
+export const Point = (x, y, id) => // constructor
 {
-	this.X = x;
-	this.Y = y;
-	this.ID = id; // stroke ID to which this point belongs (1,2,3,etc.)
+	var X = x;
+	var Y = y;
+	var ID = id; // stroke ID to which this point belongs (1,2,3,etc.)
 }
 //
 // PointCloud class: a point-cloud template
 //
-function PointCloud(name, points) // constructor
+export const PointCloud = (name, points) => // constructor
 {
-	this.Name = name;
-	this.Points = Resample(points, NumPoints);
-	this.Points = Scale(this.Points);
-	this.Points = TranslateTo(this.Points, Origin);
+	var Name = name;
+	var Points = Resample(points, NumPoints);
+	Points = Scale(Points);
+	Points = TranslateTo(Points, Origin);
 }
 //
 // Result class
 //
-function Result(name, score, ms) // constructor
+export const Result = (name, score, ms) =>// constructor
 {
 	this.Name = name;
 	this.Score = score;
@@ -95,13 +95,13 @@ const Origin = new Point(0,0,0);
 //
 // PDollarRecognizer class
 //
-function PDollarRecognizer() // constructor
+export const PDollarRecognizer = () =>// constructor
 {
 	//
 	// one predefined point-cloud for each gesture
 	//
-	this.PointClouds = new Array(NumPointClouds);
-	this.PointClouds[0] = new PointCloud("T", new Array(
+	var PointClouds = new Array(NumPointClouds);
+	PointClouds[0] = new PointCloud("T", new Array(
 		new Point(30,7,1),new Point(103,7,1),
 		new Point(66,7,2),new Point(66,87,2)
 	));
@@ -207,7 +207,7 @@ function PDollarRecognizer() // constructor
 //
 // Private helper functions from here on down
 //
-function GreedyCloudMatch(points, P)
+export const GreedyCloudMatch = (points, P) => 
 {
 	var e = 0.50;
 	var step = Math.floor(Math.pow(points.length, 1.0 - e));
@@ -219,7 +219,7 @@ function GreedyCloudMatch(points, P)
 	}
 	return min;
 }
-function CloudDistance(pts1, pts2, start)
+export const CloudDistance = (pts1, pts2, start) =>
 {
 	var matched = new Array(pts1.length); // pts1.length == pts2.length
 	for (var k = 0; k < pts1.length; k++)
@@ -247,7 +247,7 @@ function CloudDistance(pts1, pts2, start)
 	} while (i != start);
 	return sum;
 }
-function Resample(points, n)
+export const Resample = (points, n) =>
 {
 	var I = PathLength(points) / (n - 1); // interval length
 	var D = 0.0;
@@ -273,7 +273,7 @@ function Resample(points, n)
 		newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y, points[points.length - 1].ID);
 	return newpoints;
 }
-function Scale(points)
+export const Scale = (points) =>
 {
 	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
 	for (var i = 0; i < points.length; i++) {
@@ -291,7 +291,7 @@ function Scale(points)
 	}
 	return newpoints;
 }
-function TranslateTo(points, pt) // translates points' centroid to pt
+export const TranslateTo = (points, pt) =>// translates points' centroid to pt
 {
 	var c = Centroid(points);
 	var newpoints = new Array();
@@ -302,7 +302,7 @@ function TranslateTo(points, pt) // translates points' centroid to pt
 	}
 	return newpoints;
 }
-function Centroid(points)
+export const Centroid = (points) =>
 {
 	var x = 0.0, y = 0.0;
 	for (var i = 0; i < points.length; i++) {
@@ -313,7 +313,7 @@ function Centroid(points)
 	y /= points.length;
 	return new Point(x, y, 0);
 }
-function PathLength(points) // length traversed by a point path
+export const PathLength = (points) =>// length traversed by a point path
 {
 	var d = 0.0;
 	for (var i = 1; i < points.length; i++) {
@@ -322,7 +322,7 @@ function PathLength(points) // length traversed by a point path
 	}
 	return d;
 }
-function Distance(p1, p2) // Euclidean distance between two points
+export const Distance = (p1, p2) =>// Euclidean distance between two points
 {
 	var dx = p2.X - p1.X;
 	var dy = p2.Y - p1.Y;
