@@ -18,22 +18,6 @@ import {PointCloud} from './pdollar.js';
 
 export class Pdollarbox extends React.Component {
   
-  //render(){
-    //return(
-     
-    //            <Box
-    //                className={classNames(
-    //                    styles.pdollarbox
-                       
-    //                )}
-                    
-   //             >
-                
-  //              </Box>
-                
-  //
-  //  );
- // }
   
 //
         // Startup
@@ -52,7 +36,7 @@ export class Pdollarbox extends React.Component {
             this._r = new PDollarRecognizer();
 
             var canvas = document.getElementById('myCanvas');
-            _g = canvas.getContext('2d');
+            this._g = canvas.getContext('2d');
             console.log("here");
             _g.lineWidth = 3;
             _g.font = "16px Gentilis";
@@ -87,6 +71,8 @@ export class Pdollarbox extends React.Component {
             var scrollY = $(window).scrollTop();
             return scrollY;
         }
+
+
         //
         // Mouse Events
         //
@@ -176,6 +162,10 @@ export class Pdollarbox extends React.Component {
             d = Math.pow(10, d);
             return Math.round(n * d) / d;
         }
+
+
+
+        
         //
         // Multistroke Adding and Clearing
         //
@@ -235,9 +225,6 @@ export class Pdollarbox extends React.Component {
       <div style={{ position: 'relative', left: '0', top: '0', width: '10%', height: '10%'}}>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <title>$P Recognizer</title>
-      
-
-        {/*[if IE]><![endif]*/}
 
         
         <p className="subhead" data-component="subhead">Demo</p>
@@ -245,7 +232,6 @@ export class Pdollarbox extends React.Component {
         </p><table border={0} cellSpacing={10}>
           <tbody><tr>
               <td valign="top">
-                <img src="multistrokes.gif" /><br />
               </td>
               <td valign="top" align="left">
                 <table border={0} cellPadding={0} cellSpacing={0}>
@@ -262,15 +248,18 @@ export class Pdollarbox extends React.Component {
                 <canvas id="myCanvas"  style={{backgroundColor: '#dddddd'}} onMouseDown={ this.mouseDownEvent(event.clientX, event.clientY, event.button)} onMouseMove={this.mouseMoveEvent(event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent(event.clientX, event.clientY, event.button)} >
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                 </canvas>
+
                 {/*<p align="center" style="margin-top:10em;margin-bottom:10em"><i>Canvas coming soon...</i></p>*/}
                 {/* Editing area below stroking canvas area */}
                 {/* End of editing area below stroking canvas area */}
+
               </td>
             </tr>
           </tbody></table>
         <p />
         
        </div>
+
        </body>
       </Box>
     );
