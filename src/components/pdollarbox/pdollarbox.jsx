@@ -36,16 +36,23 @@ export class Pdollarbox extends React.Component {
   
 //
         // Startup
-        //
-       // var _isDown, _points, _strokeID, _r, _g, _rc; // global variables
+
+        //// global variables
+        _isDown = false;
+        _points;
+        _strokeID;
+        _r;
+        _g;
+        _rc; 
         onLoadEvent()
         {
-            _points = new Array(); // point array for current stroke
+            this._points = new Array(); // point array for current stroke
             _strokeID = 0;
             _r = new PDollarRecognizer();
 
             var canvas = document.getElementById('myCanvas');
             _g = canvas.getContext('2d');
+            console.log("here");
             _g.lineWidth = 3;
             _g.font = "16px Gentilis";
             _rc = getCanvasRect(canvas); // canvas rect on page
@@ -110,7 +117,7 @@ export class Pdollarbox extends React.Component {
         }
         mouseMoveEvent(x, y, button)
         {
-            if (_isDown)
+            if (this._isDown)
             {
                 x -= _rc.x - getScrollX();
                 y -= _rc.y - getScrollY();
@@ -204,9 +211,10 @@ export class Pdollarbox extends React.Component {
         }
         onClickClearStrokes()
         {
-            _points.length = 0;
-            _strokeID = 0;
-            _g.clearRect(0, 0, _rc.width, _rc.height);
+            
+            this._points = [];
+            this._strokeID = 0;
+            this._g.clearRect(0, 0, _rc.width, _rc.height);
             drawText("Canvas cleared.");
         }
      
@@ -221,11 +229,12 @@ export class Pdollarbox extends React.Component {
                    )}             
          >
 
-      <div>
+
+
+      <div style={{ position: 'relative', left: '0', top: '0', width: '10%', height: '10%'}}>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <title>$P Recognizer</title>
-        <link href="styles.css" rel="stylesheet" type="text/css" />
-
+      
 
         {/*[if IE]><![endif]*/}
         <p className="subhead" data-component="subhead">Demo</p>
@@ -244,10 +253,10 @@ export class Pdollarbox extends React.Component {
                           </i>
                         </p>
                       </td>
-                      <td valign="middle"><input type="button" style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick="onClickClearStrokes()" /></td>
+                      <td valign="middle"><input type="button" style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes()} /></td>
                     </tr>
                   </tbody></table>
-                <canvas id="myCanvas" width={420} height={400} style={{backgroundColor: '#dddddd'}} onMouseDown="mouseDownEvent(event.clientX, event.clientY, event.button)" onMouseMove="mouseMoveEvent(event.clientX, event.clientY, event.button)" onMouseUp="mouseUpEvent(event.clientX, event.clientY, event.button)" onContextMenu="return false;">
+                <canvas id="myCanvas"  style={{backgroundColor: '#dddddd'}} onMouseDown={ this.mouseDownEvent(event.clientX, event.clientY, event.button)} onMouseMove={this.mouseMoveEvent(event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent(event.clientX, event.clientY, event.button)} >
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                 </canvas>
                 {/*<p align="center" style="margin-top:10em;margin-bottom:10em"><i>Canvas coming soon...</i></p>*/}
