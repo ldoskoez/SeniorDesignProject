@@ -48,7 +48,10 @@ export class Pdollarbox extends React.Component {
             console.log("here");
             
             this._rc = _rc;
-           
+            //this._rc.width = _rc.width;
+            //this._rc.height = _rc.height;
+            this._rc.x = _rc.x;
+            this._rc.y = _rc.y;
 
             this._isDown = false;
         }
@@ -77,7 +80,7 @@ export class Pdollarbox extends React.Component {
         }
         getScrollX()
         {
-            var scrollX = $(window).scrollLeft();
+            var scrollX = window.scrollLeft;
             return scrollX;
         }
         getScrollY()
@@ -96,9 +99,9 @@ export class Pdollarbox extends React.Component {
             document.onmousedown = function() { return false; } // disable drag-select
             if (button <= 1)
             {
-                _isDown = true;
-                x -= _rc.x - getScrollX();
-                y -= _rc.y - getScrollY();
+                this._isDown = true;
+                x -= this._rc.x - this.getScrollX();
+                y -= this._rc.y - this.getScrollY();
                 if (_strokeID == 0) // starting a new gesture
                 {
                     _points.length = 0;
@@ -162,10 +165,10 @@ export class Pdollarbox extends React.Component {
         }
         drawText(str)
         {
-            _g.fillStyle = "rgb(255,255,136)";
-            _g.fillRect(0, 0, _rc.width, 20);
-            _g.fillStyle = "rgb(0,0,255)";
-            _g.fillText(str, 1, 14);
+            this._g.fillStyle = "rgb(255,255,136)";
+            this._g.fillRect(0, 0, this._rc.width, 20);
+            this._g.fillStyle = "rgb(0,0,255)";
+            this._g.fillText(str, 1, 14);
         }
         rand(low, high)
         {
@@ -221,8 +224,8 @@ export class Pdollarbox extends React.Component {
 
             this._points = [];
             this._strokeID = 0;
-            this._g.clearRect(0, 0, _rc.width, _rc.height);
-            drawText("Canvas cleared.");
+            this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+            this.drawText("Canvas cleared.");
         }
      
 
@@ -270,7 +273,7 @@ export class Pdollarbox extends React.Component {
                       <td valign="middle"><input type="button"  style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
                     </tr>
                   </tbody></table>
-                <canvas id="myCanvas" ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown={ this.mouseDownEvent(event.clientX, event.clientY, event.button)} onMouseMove={this.mouseMoveEvent(event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent(event.clientX, event.clientY, event.button)} >
+                <canvas id="myCanvas" ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove={this.mouseMoveEvent.bind(this, event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent.bind(this, event.clientX, event.clientY, event.button)} >
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                 </canvas>
 
@@ -292,5 +295,7 @@ export class Pdollarbox extends React.Component {
     );
   }
 }
+
+
 
 
