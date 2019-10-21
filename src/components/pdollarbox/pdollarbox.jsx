@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactDOM from 'react-dom'
 import classNames from 'classnames';
 
 import Box from '../box/box.jsx';
@@ -31,25 +32,37 @@ export class Pdollarbox extends React.Component {
         _rc; 
         onLoadEvent()
         {
+            console.log("beginning");
             this._points = new Array(); // point array for current stroke
             this._strokeID = 0;
             this._r = new PDollarRecognizer();
 
-            var canvas = document.getElementById('myCanvas');
+            //var canvas = document.getElementById('myCanvas');
+            var canvas = this.refs.myCanvas1;
             this._g = canvas.getContext('2d');
+            this._g.lineWidth = 3;
+            this._g.font = "16px Gentilis";
+            this._g.fillStyle = "rgb(255,255,136)";
+            var _rc = this.getCanvasRect(canvas); // canvas rect on page
+            this._g.fillRect(0, 0, _rc.width, 20);
             console.log("here");
-            _g.lineWidth = 3;
-            _g.font = "16px Gentilis";
-            _rc = getCanvasRect(canvas); // canvas rect on page
-            _g.fillStyle = "rgb(255,255,136)";
-            _g.fillRect(0, 0, _rc.width, 20);
+            
+            this._rc = _rc;
+           
 
-            _isDown = false;
+            this._isDown = false;
+        }
+
+        setCanvasEvent()
+        {
+           
         }
         getCanvasRect(canvas)
         {
             var w = canvas.width;
             var h = canvas.height;
+
+            console.log(w);
 
             var cx = canvas.offsetLeft;
             var cy = canvas.offsetTop;
@@ -59,6 +72,7 @@ export class Pdollarbox extends React.Component {
                 cx += canvas.offsetLeft;
                 cy += canvas.offsetTop;
             }
+            console.log(cx);
             return {x: cx, y: cy, width: w, height: h};
         }
         getScrollX()
@@ -202,7 +216,9 @@ export class Pdollarbox extends React.Component {
         }
         onClickClearStrokes()
         {
-            
+            this.onLoadEvent();
+
+
             this._points = [];
             this._strokeID = 0;
             this._g.clearRect(0, 0, _rc.width, _rc.height);
@@ -210,18 +226,27 @@ export class Pdollarbox extends React.Component {
         }
      
 
+//componentDidMount(){
+ //   console.log("compdidmount");
+ //   var canvas = ReactDOM.findDOMNode(this.refs.myCanvas);
+ //   this.onLoadEvent(canvas);
+ // }
+
+
 
    render() {
     return (
-        <Box
+         
+         <Box
            className={classNames(
                 styles.pdollarbox
                        
-                   )}             
+                   )}   
+                   
          >
 
-
-    <body onload={this.onLoadEvent()}>
+        
+   
       <div style={{ position: 'relative', left: '0', top: '0', width: '10%', height: '10%'}}>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <title>$P Recognizer</title>
@@ -242,12 +267,13 @@ export class Pdollarbox extends React.Component {
                           </i>
                         </p>
                       </td>
-                      <td valign="middle"><input type="button" style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes()} /></td>
+                      <td valign="middle"><input type="button"  style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
                     </tr>
                   </tbody></table>
-                <canvas id="myCanvas"  style={{backgroundColor: '#dddddd'}} onMouseDown={ this.mouseDownEvent(event.clientX, event.clientY, event.button)} onMouseMove={this.mouseMoveEvent(event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent(event.clientX, event.clientY, event.button)} >
+                <canvas id="myCanvas" ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown={ this.mouseDownEvent(event.clientX, event.clientY, event.button)} onMouseMove={this.mouseMoveEvent(event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent(event.clientX, event.clientY, event.button)} >
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                 </canvas>
+
 
                 {/*<p align="center" style="margin-top:10em;margin-bottom:10em"><i>Canvas coming soon...</i></p>*/}
                 {/* Editing area below stroking canvas area */}
@@ -260,8 +286,9 @@ export class Pdollarbox extends React.Component {
         
        </div>
 
-       </body>
-      </Box>
+       
+     </Box>
+    
     );
   }
 }
