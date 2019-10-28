@@ -95,6 +95,7 @@ const Origin = new Point(0,0,0);
 //
 // PDollarRecognizer class
 //
+/*
 export const PDollarRecognizer = () =>// constructor
 {
 	//
@@ -170,8 +171,8 @@ export const PDollarRecognizer = () =>// constructor
 	//
 	// The $P Point-Cloud Recognizer API begins here -- 3 methods: Recognize(), AddGesture(), DeleteUserGestures()
 	//
-	var Recognize = function(points)
-	{
+	this.Recognize = function(points)
+	{ 
 		var t0 = Date.now();
 		var candidate = new PointCloud("", points);
 
@@ -203,6 +204,33 @@ export const PDollarRecognizer = () =>// constructor
 		PointClouds.length = NumPointClouds; // clears any beyond the original set
 		return NumPointClouds;
 	}
+}
+*/
+export class PDollarRecognizer{
+	constructor(){
+		console.log("Yo I got here");
+	}
+
+	Recognize() 
+	{ 
+		var t0 = Date.now();
+		var candidate = new PointCloud("", points);
+
+		var u = -1;
+		var b = +Infinity;
+		for (var i = 0; i < PointClouds.length; i++) // for each point-cloud template
+		{
+			var d = GreedyCloudMatch(candidate.Points, PointClouds[i]);
+			if (d < b) {
+				b = d; // best (least) distance
+				u = i; // point-cloud index
+			}
+		}
+		var t1 = Date.now();
+		return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(PointClouds[u].Name, b > 1.0 ? 1.0 / b : 1.0, t1-t0);
+	}
+
+
 }
 //
 // Private helper functions from here on down

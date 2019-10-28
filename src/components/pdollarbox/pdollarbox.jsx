@@ -14,8 +14,8 @@ import MicIndicator from '../mic-indicator/mic-indicator.jsx';
 import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
 import {getStageDimensions} from '../../lib/screen-utils.js';
 import styles from './pdollarbox.css';
-import {PDollarRecognizer} from './pdollar.js';
-import {PointCloud} from './pdollar.js'; 
+import * as pdollartools from './pdollar.js';
+//import {PointCloud} from './pdollar.js'; 
 
 export class Pdollarbox extends React.Component {
   
@@ -35,7 +35,8 @@ export class Pdollarbox extends React.Component {
             console.log("beginning");
             this._points = new Array(); // point array for current stroke
             this._strokeID = 0;
-            this._r = new PDollarRecognizer();
+            var _r = new pdollartools.PDollarRecognizer();
+            this._r = _r;
 
             //var canvas = document.getElementById('myCanvas');
             var canvas = this.refs.myCanvas1;
@@ -85,7 +86,7 @@ export class Pdollarbox extends React.Component {
         }
         getScrollY()
         {
-            var scrollY = $(window).scrollTop();
+            var scrollY = window.scrollTop;
             return scrollY;
         }
 
@@ -102,31 +103,31 @@ export class Pdollarbox extends React.Component {
                 this._isDown = true;
                 x -= this._rc.x - this.getScrollX();
                 y -= this._rc.y - this.getScrollY();
-                if (_strokeID == 0) // starting a new gesture
+                if (this._strokeID == 0) // starting a new gesture
                 {
-                    _points.length = 0;
-                    _g.clearRect(0, 0, _rc.width, _rc.height);
+                    this._points.length = 0;
+                    this._g.clearRect(0, 0, this._rc.width, this._rc.height);
                 }
-                _points[_points.length] = new Point(x, y, ++_strokeID);
-                drawText("Recording stroke #" + _strokeID + "...");
-                var clr = "rgb(" + rand(0,200) + "," + rand(0,200) + "," + rand(0,200) + ")";
-                _g.strokeStyle = clr;
-                _g.fillStyle = clr;
-                _g.fillRect(x - 4, y - 3, 9, 9);
+                this._points[this._points.length] = new pdollartools.Point(x, y, ++this._strokeID);
+                this.drawText("Recording stroke #" + this._strokeID + "...");
+                var clr = "rgb(" + this.rand(0,200) + "," + this.rand(0,200) + "," + this.rand(0,200) + ")";
+                this._g.strokeStyle = clr;
+                this._g.fillStyle = clr;
+                this._g.fillRect(x - 4, y - 3, 9, 9);
             }
             else if (button == 2)
             {
-                drawText("Recognizing gesture...");
+                this.drawText("Recognizing gesture...");
             }
         }
         mouseMoveEvent(x, y, button)
         {
             if (this._isDown)
             {
-                x -= _rc.x - getScrollX();
-                y -= _rc.y - getScrollY();
-                _points[_points.length] = new Point(x, y, _strokeID); // append
-                drawConnectedPoint(_points.length - 2, _points.length - 1);
+                x -= this._rc.x - this.getScrollX();
+                y -= this._rc.y - this.getScrollY();
+                this._points[this._points.length] = new pdollartools.Point(x, y, this._strokeID); // append
+                this.drawConnectedPoint(this._points.length - 2, this._points.length - 1);
             }
         }
         mouseUpEvent(x, y, button)
@@ -135,33 +136,34 @@ export class Pdollarbox extends React.Component {
             document.onmousedown = function() { return true; } // enable drag-select
             if (button <= 1)
             {
-                if (_isDown)
+                if (this._isDown)
                 {
-                    _isDown = false;
-                    drawText("Stroke #" + _strokeID + " recorded.");
+                    this._isDown = false;
+                    this.drawText("Stroke #" + this._strokeID + " recorded.");
                 }
             }
             else if (button == 2) // segmentation with right-click
             {
-                if (_points.length >= 10)
+                if (this._points.length >= 10)
                 {
-                    var result = _r.Recognize(_points);
-                    drawText("Result: " + result.Name + " (" + round(result.Score,2) + ") in " + result.Time + " ms.");
+                    console.log(this._r);
+                    var result = this._r.Recognize(this._points);
+                    this.drawText("Result: " + result.Name + " (" + round(result.Score,2) + ") in " + result.Time + " ms.");
                 }
                 else
                 {
-                    drawText("Too little input made. Please try again.");
+                    this.drawText("Too little input made. Please try again.");
                 }
-                _strokeID = 0; // signal to begin new gesture on next mouse-down
+                this._strokeID = 0; // signal to begin new gesture on next mouse-down
             }
         }
         drawConnectedPoint(from, to)
         {
-            _g.beginPath();
-            _g.moveTo(_points[from].X, _points[from].Y);
-            _g.lineTo(_points[to].X, _points[to].Y);
-            _g.closePath();
-            _g.stroke();
+            this._g.beginPath();
+            this._g.moveTo(this._points[from].X, this._points[from].Y);
+            this._g.lineTo(this._points[to].X, this._points[to].Y);
+            this._g.closePath();
+            this._g.stroke();
         }
         drawText(str)
         {
@@ -252,28 +254,20 @@ export class Pdollarbox extends React.Component {
    
       <div style={{ position: 'relative', left: '0', top: '0', width: '10%', height: '10%'}}>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>$P Recognizer</title>
-
         
-        <p className="subhead" data-component="subhead">Demo</p>
-        <p>
-        </p><table border={0} cellSpacing={10}>
+        <table border={0} cellSpacing={0}>
           <tbody><tr>
-              <td valign="top">
-              </td>
+             
               <td valign="top" align="left">
                 <table border={0} cellPadding={0} cellSpacing={0}>
                   <tbody><tr>
                       <td valign="bottom">
-                        <p style={{fontSize: '10pt'}}><i>Make strokes on this canvas.
-                            <b><u>Right-click</u> the canvas to recognize.</b>
-                          </i>
-                        </p>
+                       
                       </td>
                       <td valign="middle"><input type="button"  style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
                     </tr>
                   </tbody></table>
-                <canvas id="myCanvas" ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove={this.mouseMoveEvent.bind(this, event.clientX, event.clientY, event.button)} onMouseUp={this.mouseUpEvent.bind(this, event.clientX, event.clientY, event.button)} >
+                <canvas id="myCanvas" width = '145px' height = '87px' ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} >
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                 </canvas>
 
