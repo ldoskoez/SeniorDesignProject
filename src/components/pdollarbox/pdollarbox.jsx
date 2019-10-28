@@ -124,8 +124,10 @@ export class Pdollarbox extends React.Component {
         {
             if (this._isDown)
             {
-                x -= this._rc.x - this.getScrollX();
-                y -= this._rc.y - this.getScrollY();
+                //x -= this._rc.x - this.getScrollX();
+                //y -= this._rc.y - this.getScrollY();
+                x -= this._rc.x ;
+                y -= this._rc.y ;
                 this._points[this._points.length] = new pdollartools.Point(x, y, this._strokeID); // append
                 this.drawConnectedPoint(this._points.length - 2, this._points.length - 1);
             }
@@ -146,7 +148,7 @@ export class Pdollarbox extends React.Component {
             {
                 if (this._points.length >= 10)
                 {
-                    console.log(this._r);
+                    console.log(this._points);
                     var result = this._r.Recognize(this._points);
                     this.drawText("Result: " + result.Name + " (" + round(result.Score,2) + ") in " + result.Time + " ms.");
                 }
