@@ -77,6 +77,7 @@ export class PointCloud // constructor
 		this.Name = name;
 		this.Points = Resample(points, NumPoints);
 		this.Points = Scale(this.Points);
+		//console.log(this.Points);
 		this.Points = TranslateTo(this.Points, Origin);
 	}
 }
@@ -290,15 +291,15 @@ export class PDollarRecognizer{
 
 	Recognize(points) 
 	{ 
-		console.log(points);
+		//console.log(points);
 		var t0 = Date.now();
 		var candidate = new PointCloud("", points);
-		//console.log(points);
+		//console.log(candidate.Points);
 		var u = -1;
 		var b = +Infinity;
 		for (var i = 0; i < this.PointClouds.length; i++) // for each point-cloud template
 		{
-			console.log(candidate.Points);
+			//console.log(candidate.Points);
 			var d = GreedyCloudMatch(candidate.Points, this.PointClouds[i]);
 			if (d < b) {
 				b = d; // best (least) distance
@@ -384,6 +385,7 @@ export const Resample = (points, n) =>
 }
 export const Scale = (points) =>
 {
+	//console.log(points);
 	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
 	for (var i = 0; i < points.length; i++) {
 		minX = Math.min(minX, points[i].X);
@@ -391,6 +393,10 @@ export const Scale = (points) =>
 		maxX = Math.max(maxX, points[i].X);
 		maxY = Math.max(maxY, points[i].Y);
 	}
+	console.log(maxX);
+	console.log(minX);
+	console.log(maxY);
+	console.log(minY);
 	var size = Math.max(maxX - minX, maxY - minY);
 	var newpoints = new Array();
 	for (var i = 0; i < points.length; i++) {
@@ -398,6 +404,7 @@ export const Scale = (points) =>
 		var qy = (points[i].Y - minY) / size;
 		newpoints[newpoints.length] = new Point(qx, qy, points[i].ID);
 	}
+	//console.log(newpoints);
 	return newpoints;
 }
 export const TranslateTo = (points, pt) =>// translates points' centroid to pt
@@ -433,6 +440,10 @@ export const PathLength = (points) =>// length traversed by a point path
 }
 export const Distance = (p1, p2) =>// Euclidean distance between two points
 {
+	 if(isNaN(p1.X) || isNaN(p1.Y) || isNaN(p2.Y) || isNaN(p2.X)){//ADDED
+
+	 	return 0;
+	 } 
 	var dx = p2.X - p1.X;
 	var dy = p2.Y - p1.Y;
 	return Math.sqrt(dx * dx + dy * dy);

@@ -148,9 +148,21 @@ export class Pdollarbox extends React.Component {
             {
                 if (this._points.length >= 10)
                 {
+                    console.log(this._points); //ADDED BLOCK 
+                    for(var k=0;k<this._points.length;k++)
+                    {
+                        if(isNaN(this._points[k]) && k<this._points.length-1)
+                        {
+                            this._points[k] = this._points[k+1];
+                        }
+                        else if (isNaN(this._points[k]) && k == this._points.length-1){
+                            this._points[k] = this._points[k-1];
+                        }
+
+                    }
                     console.log(this._points);
                     var result = this._r.Recognize(this._points);
-                    this.drawText("Result: " + result.Name + " (" + round(result.Score,2) + ") in " + result.Time + " ms.");
+                    this.drawText("Result: " + result.Name + " (" + Math.round(result.Score) + ") in " + result.Time + " ms.");
                 }
                 else
                 {
