@@ -30,8 +30,13 @@ export class Pdollarbox extends React.Component {
         _r;
         _g;
         _rc; 
+        _mostRecentGesture;
+
         onLoadEvent()
         {
+            this._mostRecentGesture = 'x';
+            
+
             console.log("beginning");
             this._points = new Array(); // point array for current stroke
             this._strokeID = 0;
@@ -162,6 +167,10 @@ export class Pdollarbox extends React.Component {
                     }
                     console.log(this._points);
                     var result = this._r.Recognize(this._points);
+
+                    this._mostRecentGesture = result.Name;
+                    localStorage.setItem('mostRecentGesture', this._mostRecentGesture);
+
                     this.drawText("Result: " + result.Name + " (" + Math.round(result.Score) + ") in " + result.Time + " ms.");
                 }
                 else

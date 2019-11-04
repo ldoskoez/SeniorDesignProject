@@ -1,8 +1,8 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import nitroIconURL from './NitroBlock/westfall.png';
-import nitroInsetIconURL from './NitroBlock/pen-small.svg';
+import gestureIconURL from './GestureBlock/westfall.png';
+import gestureInsetIconURL from './GestureBlock/pen-small.svg';
 
 import musicIconURL from './music/music.png';
 import musicInsetIconURL from './music/music-small.svg';
@@ -53,19 +53,19 @@ export default [
     {
         name: (
             <FormattedMessage
-                defaultMessage="NitroBlock"
-                description="Name for the 'NitroTest' extension"
-                id="gui.extension.NitroBlock.name"
+                defaultMessage="GestureBlock"
+                description="Name for the 'GestureTest' extension"
+                id="gui.extension.GestureBlock.name"
             />
         ),
-        extensionId: 'NitroBlock',
-        iconURL: nitroIconURL,
-        insetIconURL: nitroInsetIconURL,
+        extensionId: 'GestureBlock',
+        iconURL: gestureIconURL,
+        insetIconURL: gestureInsetIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="testing with nitro blocks"
-                description="Description for the 'test nitro' extension"
-                id="gui.extension.NitroBlock.description"
+                defaultMessage="testing with gesture blocks"
+                description="Description for the 'test gesture' extension"
+                id="gui.extension.GestureBlock.description"
             />
         ),
         featured: true
