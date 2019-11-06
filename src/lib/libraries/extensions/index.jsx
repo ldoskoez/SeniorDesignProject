@@ -1,7 +1,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import gestureIconURL from './GestureBlock/westfall.png';
+import gestureIconURL from './GestureBlock/pdollar_screenshot.png';
 import gestureInsetIconURL from './GestureBlock/pen-small.svg';
 
 import musicIconURL from './music/music.png';
