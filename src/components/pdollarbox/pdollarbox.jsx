@@ -252,6 +252,53 @@ export class Pdollarbox extends React.Component {
             this._g.clearRect(0, 0, this._rc.width, this._rc.height);
             this.drawText("Canvas cleared.");
         }
+
+        onClickRecognizeStrokes(){
+         if (this._points.length >= 10)
+                {
+                    console.log(this._points); //ADDED BLOCK 
+                    for(var k=0;k<this._points.length;k++)
+                    {
+                        if(isNaN(this._points[k]) && k<this._points.length-1)
+                        {
+                            this._points[k] = this._points[k+1];
+                        }
+                        else if (isNaN(this._points[k]) && k == this._points.length-1){
+                            this._points[k] = this._points[k-1];
+                        }
+
+                    }
+                    console.log(this._points);
+                    var result = this._r.Recognize(this._points);
+
+                    this._mostRecentGesture = result.Name;
+                    localStorage.setItem('mostRecentGesture', this._mostRecentGesture);
+
+                    this.drawText("Result: " + result.Name);
+                }
+                else
+                {
+                    this.drawText("Too little input made. Please try again.");
+                }
+                
+                
+                this._strokeID = 0; // signal to begin new gesture on next mouse-down
+
+        }
+
+        doNothing(){
+            return 0;
+        }
+
+        afterRecognizeClearStrokes()
+        {
+           
+            console.log("HI after rec");
+            this._points = [];
+            this._strokeID = 0;
+            this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+            //this.drawText("Canvas cleared.");
+        }
      
 
 //componentDidMount(){
@@ -288,6 +335,7 @@ export class Pdollarbox extends React.Component {
                        
                       </td>
                       <td valign="middle"><input type="button"  style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
+                      <td valign="middle"><input type="button"  style={{width: '80px', float: 'right'}} defaultValue=" Recognize  " onClick={this.onClickRecognizeStrokes.bind(this)} /></td>
                     </tr>
                   </tbody></table>
                 <canvas id="myCanvas" width = '145px' height = '87px' ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} >
