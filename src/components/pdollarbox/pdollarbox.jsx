@@ -24,6 +24,8 @@ export class Pdollarbox extends React.Component {
         // Startup
 
         //// global variables
+        touchx;
+        touchy;
         _isDown = false;
         _points;
         _strokeID;
@@ -52,10 +54,8 @@ export class Pdollarbox extends React.Component {
             var _rc = this.getCanvasRect(canvas); // canvas rect on page
             this._g.fillRect(0, 0, _rc.width, 20);
             console.log("here");
-            
+
             this._rc = _rc;
-            //this._rc.width = _rc.width;
-            //this._rc.height = _rc.height;
             this._rc.x = _rc.x;
             this._rc.y = _rc.y;
 
@@ -96,6 +96,73 @@ export class Pdollarbox extends React.Component {
         }
 
 
+
+        //Touch Events
+
+        touchStart(touch) {
+            this._isDown = true;
+            var x=touch[0].pageX-touch[0].target.offsetLeft;
+            var y=touch[0].pageY-touch[0].target.offsetTop;
+
+
+                if (this._strokeID == 0) // starting a new gesture
+                    {
+                        this._points.length = 0;
+                        this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+                    }
+
+                console.log("points", x, y);
+                this._points[this._points.length] = new pdollartools.Point(x, y, ++this._strokeID);
+                this.drawText("Recording stroke #" + this._strokeID + "...");
+                var clr = "rgb(" + this.rand(0,200) + "," + this.rand(0,200) + "," + this.rand(0,200) + ")";
+                this._g.strokeStyle = clr;
+                this._g.fillStyle = clr;
+                this._g.fillRect(x - 4, y - 3, 9, 9);
+            }
+        
+
+        touchMove(touch) { 
+            if (this._isDown)
+            {
+                
+                var x=touch[0].pageX-touch[0].target.offsetLeft;
+                var y=touch[0].pageY -touch[0].target.offsetTop;
+
+
+                this._points[this._points.length] = new pdollartools.Point(x, y, this._strokeID); // append
+                var clr = "rgb(" + this.rand(0,200) + "," + this.rand(0,200) + "," + this.rand(0,200) + ")";
+                this._g.strokeStyle = clr;
+                this._g.fillStyle = clr;
+                this._g.fillRect(x - 4, y - 3, 9, 9);
+                // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
+                //this.drawConnectedPointTouch(this._points.length - 2, this._points.length - 1);
+                this.drawDot(x-781,y-343, 5);
+                console.log("draw", x , y);
+            }
+            // Prevent a scrolling action as a result of this touchmove triggering.
+
+        }
+
+        touchEnd(){
+            this._isDown=false;
+            this.drawText("Stroke #" + this._strokeID + " recorded.");
+        }
+
+        drawDot(x,y,size) {
+            // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
+            var r=0; var g=0; var b=0; var a=255;
+    
+            // Select a fill style
+            this._g.fillStyle = "rgba("+r+","+g+","+b+","+(a/255)+")";
+    
+            // Draw a filled circle
+            this._g.beginPath();
+            this._g.arc(x, y, size, 0, Math.PI*2, true); 
+            this._g.closePath();
+            this._g.fill();
+        }
+
+
         //
         // Mouse Events
         //
@@ -108,6 +175,7 @@ export class Pdollarbox extends React.Component {
                 this._isDown = true;
                 x -= this._rc.x - this.getScrollX();
                 y -= this._rc.y - this.getScrollY();
+                
                 if (this._strokeID == 0) // starting a new gesture
                 {
                     this._points.length = 0;
@@ -133,8 +201,10 @@ export class Pdollarbox extends React.Component {
                 //y -= this._rc.y - this.getScrollY();
                 x -= this._rc.x ;
                 y -= this._rc.y ;
+                console.log("mouse", x,y);
                 this._points[this._points.length] = new pdollartools.Point(x, y, this._strokeID); // append
                 this.drawConnectedPoint(this._points.length - 2, this._points.length - 1);
+                console.log("mouse draw", this._points.length - 2, this._points.length - 1);
             }
         }
         mouseUpEvent(x, y, button)
@@ -170,8 +240,15 @@ export class Pdollarbox extends React.Component {
 
                     this._mostRecentGesture = result.Name;
                     localStorage.setItem('mostRecentGesture', this._mostRecentGesture);
+                    
+                    this.onLoadEvent();
 
-                    this.drawText("Result: " + result.Name + " (" + Math.round(result.Score) + ") in " + result.Time + " ms.");
+
+                    this._points = [];
+                    this._strokeID = 0;
+                    this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+                    this.drawText("Result: " + result.Name);
+                    
                 }
                 else
                 {
@@ -182,8 +259,19 @@ export class Pdollarbox extends React.Component {
         }
         drawConnectedPoint(from, to)
         {
+            console.log("hi from draw");
             this._g.beginPath();
             this._g.moveTo(this._points[from].X, this._points[from].Y);
+            this._g.lineTo(this._points[to].X, this._points[to].Y);
+            this._g.closePath();
+            this._g.stroke();
+        }
+
+        drawConnectedPointTouch(from, to)
+        {
+            console.log("hi from draw");
+            this._g.beginPath();
+            this._g.moveTo(this._points[from].X-814, this._points[from].Y-373);
             this._g.lineTo(this._points[to].X, this._points[to].Y);
             this._g.closePath();
             this._g.stroke();
@@ -270,15 +358,21 @@ export class Pdollarbox extends React.Component {
                     }
                     console.log(this._points);
                     var result = this._r.Recognize(this._points);
-
+                    console.log(result.Name);
                     this._mostRecentGesture = result.Name;
                     localStorage.setItem('mostRecentGesture', this._mostRecentGesture);
 
+                    this._points = [];
+                    this._strokeID = 0;
+                    this._g.clearRect(0, 0, this._rc.width, this._rc.height);
                     this.drawText("Result: " + result.Name);
                 }
                 else
-                {
-                    this.drawText("Too little input made. Please try again.");
+                {                    
+                    this._points = [];
+                    this._strokeID = 0;
+                    this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+                    this.drawText("Too little input made.");
                 }
                 
                 
@@ -338,10 +432,11 @@ export class Pdollarbox extends React.Component {
                       <td valign="middle"><input type="button"  style={{width: '80px', float: 'right'}} defaultValue=" Recognize  " onClick={this.onClickRecognizeStrokes.bind(this)} /></td>
                     </tr>
                   </tbody></table>
-                <canvas id="myCanvas" width = '145px' height = '87px' ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} >
+                <canvas id="myCanvas" width = '145px' height = '87px' ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} onTouchStart = {(e) => this.touchStart(e.changedTouches)} onTouchMove = {(e) => this.touchMove(e.changedTouches)} onTouchEnd = {(e) => this.touchEnd()}>
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                 </canvas>
-
+            {/* canvas.addEventListener('touchstart', this.sketchpad_touchStart, false);
+            canvas.addEventListener('touchmove', this.sketchpad_touchMove, false); */}
 
                 {/*<p align="center" style="margin-top:10em;margin-bottom:10em"><i>Canvas coming soon...</i></p>*/}
                 {/* Editing area below stroking canvas area */}
