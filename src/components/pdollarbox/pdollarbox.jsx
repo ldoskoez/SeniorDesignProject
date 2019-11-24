@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom'
+
 import classNames from 'classnames';
 
 import Box from '../box/box.jsx';
@@ -252,6 +253,20 @@ export class Pdollarbox extends React.Component {
             this._g.clearRect(0, 0, this._rc.width, this._rc.height);
             this.drawText("Canvas cleared.");
         }
+
+        startRecognizing()
+        {
+        
+            ReactDOM.findDOMNode(this.refs.overlayblock).style.display = 'none';
+
+        }
+
+        addNewGesturePage()
+        {
+
+             ReactDOM.findDOMNode(this.refs.overlayblock).style.display = 'none';
+              ReactDOM.findDOMNode(this.refs.addNewGesture).style.display = 'block';
+        }
      
 
 //componentDidMount(){
@@ -275,9 +290,20 @@ export class Pdollarbox extends React.Component {
 
         
    
-      <div style={{ position: 'relative', left: '0', top: '0', width: '10%', height: '10%'}}>
+      <div style={{ position: 'relative', left: '0', top: '0'}}>
+      
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        
+
+            <div valign="middle" style = {{position: 'absolute', backgroundColor:'#32CD32', zIndex:'500', width :'145px', height : '120px', display:'block'}} ref = "overlayblock">
+
+                <input type="button"   defaultValue=" Recognize Gestures  " onClick={this.startRecognizing.bind(this)} />
+                <input type="button"   defaultValue=" New Gesture  " onClick={this.addNewGesturePage.bind(this)} />
+            </div>
+
+            <div valign="middle" style = {{position: 'absolute', backgroundColor:'#32CD32', zIndex:'500', width :'145px', height : '120px', display:'none'}} ref = "addNewGesture">
+
+            </div>
+
         <table border={0} cellSpacing={0}>
           <tbody><tr>
              
@@ -290,11 +316,12 @@ export class Pdollarbox extends React.Component {
                       <td valign="middle"><input type="button"  style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
                     </tr>
                   </tbody></table>
+
                 <canvas id="myCanvas" width = '145px' height = '87px' ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} >
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
+               
                 </canvas>
-
-
+ 
                 {/*<p align="center" style="margin-top:10em;margin-bottom:10em"><i>Canvas coming soon...</i></p>*/}
                 {/* Editing area below stroking canvas area */}
                 {/* End of editing area below stroking canvas area */}
@@ -303,6 +330,8 @@ export class Pdollarbox extends React.Component {
             </tr>
           </tbody></table>
         <p />
+        
+
         
        </div>
 
