@@ -336,6 +336,27 @@ export class Pdollarbox extends React.Component {
                 this.drawText(name + " added.");
                 this._strokeID = 0; // signal to begin new gesture on next mouse-down
             }
+
+            localStorage.setItem('mostRecentCustomGesture', name);
+
+            //also update the buttons
+            //don't need to change clear button
+
+             //make turn ON recognize button
+             ReactDOM.findDOMNode(this.refs.recognizeButton).style.display = 'block';
+
+             //turn OFF input field for name
+             ReactDOM.findDOMNode(this.refs.inputField).style.display = 'none';
+
+             //turn ON the + button
+             ReactDOM.findDOMNode(this.refs.plusButton).style.display = 'block';
+
+             //turn OFF the add button
+             ReactDOM.findDOMNode(this.refs.addButton).style.display = 'none';
+
+              this.forceUpdate();
+
+
         }
         onClickCustom()
         {
@@ -393,10 +414,30 @@ export class Pdollarbox extends React.Component {
              //turn ON the add button
              ReactDOM.findDOMNode(this.refs.addButton).style.display = 'block';
 
-
-
-              //ReactDOM.findDOMNode(this.refs.addNewGesture).style.display = 'block';
+             this.drawText("Draw your custom gesture");
         }
+
+        backToNewGesturePage()
+        {
+            this.drawText("Draw your custom gesture");
+
+            //don't need to change clear button
+
+             //make turn OFF recognize button
+             ReactDOM.findDOMNode(this.refs.recognizeButton).style.display = 'none';
+
+             //turn ON input field for name
+             ReactDOM.findDOMNode(this.refs.inputField).style.display = 'block';
+
+             //turn OFF the + button
+             ReactDOM.findDOMNode(this.refs.plusButton).style.display = 'none';
+
+             //turn ON the add button
+             ReactDOM.findDOMNode(this.refs.addButton).style.display = 'block';
+
+              
+        }
+
         onClickRecognizeStrokes(){
          if (this._points.length >= 10)
                 {
@@ -480,6 +521,7 @@ export class Pdollarbox extends React.Component {
             <div valign="middle"  style = {{position: 'absolute', borderRadius:'50 px', padding: '20px', backgroundColor:'#4E97FE', zIndex:'500', width :'192px', height : '146px', display:'block'}} ref = "overlayblock">
 
                 <input type="button" style={{padding: '5px', margin: '10px 0px 10px 5px', backgroundColor:"#FFFFFF"}} defaultValue=" Recognize Gestures  " onClick={this.startRecognizing.bind(this)} />
+
                 <input type="button"  style={{padding: '5px', margin: '0px 0px 10px 25px', backgroundColor:"#FFFFFF"}} defaultValue=" New Gesture  " onClick={this.addNewGesturePage.bind(this)} />
 
             </div>
@@ -500,12 +542,13 @@ export class Pdollarbox extends React.Component {
 
                       <td valign="middle"><input type="button"  style={{width: '64px', padding: '10 px', margin: '0px 10px 0px 0px', float: 'right', backgroundColor:"#FFFFFF"}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
 
-                      <td valign="middle"><input type="button"  style={{width: '80px', float: 'right', backgroundColor:"#FFFFFF"}} defaultValue=" Recognize  " onClick={this.onClickRecognizeStrokes.bind(this)} /></td>
-                      <td valign="top" align="right"><input type="text" ref = "inputField" placeholder = "Name..." id="custom" style={{width:'130px', display:'none'}} onClick={this.onClickCustom.bind(this)}  /></td>
+                      <td valign="middle"><input type="button" ref = "recognizeButton" style={{width: '80px', float: 'right', backgroundColor:"#FFFFFF"}} defaultValue=" Recognize  " onClick={this.onClickRecognizeStrokes.bind(this)} /></td>
 
-                      <td valign="middle"><input type="button"  ref = "plusButton" style={{width: '30px', float: 'right'}} defaultValue=" +  " onClick={this.addNewGesturePage.bind(this)} /></td>
+                      <td valign="top" align="right"><input type="text" ref = "inputField" placeholder = "Name..." id="custom" style={{width: '45px', padding: '10 px', margin: '0px 10px 0px 0px', float: 'right', backgroundColor:"#FFFFFF", display: 'none'}}  onClick={this.onClickCustom.bind(this)}  /></td>
 
-                      <td valign="middle"><input type="button"  ref = "addButton" style={{width: '30px', float: 'right', display:'none'}} defaultValue=" Add  " onClick={this.onClickAddCustom.bind(this)} /></td>
+                      <td valign="middle"><input type="button"  ref = "plusButton" style={{width: '30px', padding: '10 px', margin: '0px 10px 0px 0px', float: 'right', backgroundColor:"#FFFFFF"}} defaultValue=" +  " onClick={this.backToNewGesturePage.bind(this)} /></td>
+
+                      <td valign="middle"><input type="button"  ref = "addButton" style={{width: '45px', padding: '10 px', margin: '0px 10px 0px 0px', float: 'right', backgroundColor:"#FFFFFF", display:'none'}} defaultValue=" Add  " onClick={this.onClickAddCustom.bind(this)} /></td>
 
                     </tr>
                   </tbody></table>
