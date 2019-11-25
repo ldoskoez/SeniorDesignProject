@@ -51,7 +51,7 @@ export class Pdollarbox extends React.Component {
             this._g = canvas.getContext('2d');
             this._g.lineWidth = 3;
             this._g.font = "16px Gentilis";
-            this._g.fillStyle = "rgb(255,255,136)";
+            this._g.fillStyle = "rgb(255,255,255)";
             var _rc = this.getCanvasRect(canvas); // canvas rect on page
             this._g.fillRect(0, 0, _rc.width, 20);
             console.log("here");
@@ -137,7 +137,7 @@ export class Pdollarbox extends React.Component {
                 this._g.fillRect(x - 4, y - 3, 9, 9);
                 // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
                 //this.drawConnectedPointTouch(this._points.length - 2, this._points.length - 1);
-                this.drawDot(x-781,y-343, 5);
+                this.drawDot(x-792,y-314, 5);
                 console.log("draw", x , y);
             }
             // Prevent a scrolling action as a result of this touchmove triggering.
@@ -279,10 +279,11 @@ export class Pdollarbox extends React.Component {
         }
         drawText(str)
         {
-            this._g.fillStyle = "rgb(255,255,136)";
+            this._g.fillStyle = "rgb(78,151,254)";
             this._g.fillRect(0, 0, this._rc.width, 20);
-            this._g.fillStyle = "rgb(0,0,255)";
-            this._g.fillText(str, 1, 14);
+            this._g.fillStyle = "rgb(255,255,255)";
+            this._g.font = "normal 15px Times New Roman";
+            this._g.fillText(str, 1, 15);
         }
         rand(low, high)
         {
@@ -362,6 +363,13 @@ export class Pdollarbox extends React.Component {
         {
         
             ReactDOM.findDOMNode(this.refs.overlayblock).style.display = 'none';
+            this.onLoadEvent();
+
+
+            this._points = [];
+            this._strokeID = 0;
+            this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+            this.drawText("Start Drawing!");
 
         }
 
@@ -469,10 +477,11 @@ export class Pdollarbox extends React.Component {
       
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 
-            <div valign="middle" style = {{position: 'absolute', backgroundColor:'#32CD32', zIndex:'500', width :'145px', height : '120px', display:'block'}} ref = "overlayblock">
+            <div valign="middle"  style = {{position: 'absolute', borderRadius:'50 px', padding: '20px', backgroundColor:'#4E97FE', zIndex:'500', width :'192px', height : '146px', display:'block'}} ref = "overlayblock">
 
-                <input type="button"   defaultValue=" Recognize Gestures  " onClick={this.startRecognizing.bind(this)} />
-                <input type="button"   defaultValue=" New Gesture  " onClick={this.addNewGesturePage.bind(this)} />
+                <input type="button" style={{padding: '5px', margin: '10px 0px 10px 5px', backgroundColor:"#FFFFFF"}} defaultValue=" Recognize Gestures  " onClick={this.startRecognizing.bind(this)} />
+                <input type="button"  style={{padding: '5px', margin: '0px 0px 10px 25px', backgroundColor:"#FFFFFF"}} defaultValue=" New Gesture  " onClick={this.addNewGesturePage.bind(this)} />
+
             </div>
 
             <div valign="middle" style = {{position: 'absolute', backgroundColor:'#32CD32', zIndex:'500', width :'145px', height : '120px', display:'none'}} ref = "addNewGesture">
@@ -488,19 +497,20 @@ export class Pdollarbox extends React.Component {
                       <td valign="bottom">
                        
                       </td>
-                      <td valign="middle"><input type="button"  style={{width: '64px', float: 'right'}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
 
-                      <td valign="middle"><input type="button"  ref = "recognizeButton" style={{width: '80px', float: 'right'}} defaultValue=" Recognize  " onClick={this.onClickRecognizeStrokes.bind(this)} /></td>
+                      <td valign="middle"><input type="button"  style={{width: '64px', padding: '10 px', margin: '0px 10px 0px 0px', float: 'right', backgroundColor:"#FFFFFF"}} defaultValue=" Clear  " onClick={this.onClickClearStrokes.bind(this)} /></td>
 
+                      <td valign="middle"><input type="button"  style={{width: '80px', float: 'right', backgroundColor:"#FFFFFF"}} defaultValue=" Recognize  " onClick={this.onClickRecognizeStrokes.bind(this)} /></td>
                       <td valign="top" align="right"><input type="text" ref = "inputField" placeholder = "Name..." id="custom" style={{width:'130px', display:'none'}} onClick={this.onClickCustom.bind(this)}  /></td>
 
                       <td valign="middle"><input type="button"  ref = "plusButton" style={{width: '30px', float: 'right'}} defaultValue=" +  " onClick={this.addNewGesturePage.bind(this)} /></td>
 
                       <td valign="middle"><input type="button"  ref = "addButton" style={{width: '30px', float: 'right', display:'none'}} defaultValue=" Add  " onClick={this.onClickAddCustom.bind(this)} /></td>
+
                     </tr>
                   </tbody></table>
 
-                <canvas id="myCanvas" width = '145px' height = '87px' ref ="myCanvas1" style={{backgroundColor: '#dddddd'}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} onTouchStart = {(e) => this.touchStart(e.changedTouches)} onTouchMove = {(e) => this.touchMove(e.changedTouches)} onTouchEnd = {(e) => this.touchEnd()}>
+                <canvas id="myCanvas" width = '191px' height = '123px' ref ="myCanvas1" style={{backgroundColor:"#FFFFFF"}} onMouseDown= {(e) => this.mouseDownEvent( e.clientX, e.clientY, e.button)} onMouseMove = {(e) => this.mouseMoveEvent(e.clientX, e.clientY, e.button)} onMouseUp = {(e) => this.mouseUpEvent(e.clientX, e.clientY, e.button)} onTouchStart = {(e) => this.touchStart(e.changedTouches)} onTouchMove = {(e) => this.touchMove(e.changedTouches)} onTouchEnd = {(e) => this.touchEnd()}>
 
                   <span style={{backgroundColor: '#ffff88'}}>The &lt;canvas&gt; element is not supported by this browser.</span>
                
