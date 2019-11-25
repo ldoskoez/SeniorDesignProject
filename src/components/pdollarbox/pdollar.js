@@ -291,6 +291,8 @@ export class PDollarRecognizer{
 
 	Recognize(points) 
 	{ 
+		console.log("recognize:");
+		console.log(this.PointClouds);
 		//console.log(points);
 		var t0 = Date.now();
 		var candidate = new PointCloud("", points);
@@ -308,6 +310,21 @@ export class PDollarRecognizer{
 		}
 		var t1 = Date.now();
 		return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.PointClouds[u].Name, b > 1.0 ? 1.0 / b : 1.0, t1-t0);
+	}
+
+	AddGesture(name, points)
+	{
+		console.log("add gesture");
+		console.log(points);
+		this.PointClouds[this.PointClouds.length] = new PointCloud(name, points);
+		var num = 0;
+		for (var i = 0; i < this.PointClouds.length; i++) {
+			if (this.PointClouds[i].Name == name)
+				num++;
+		}
+		console.log("end");
+		console.log(this.PointClouds);
+		return num;
 	}
 
 
